@@ -1,0 +1,34 @@
+section.register {
+  max-width: 425px;
+  min-height: 100vh;
+  background-color: #fff;
+  margin: auto;
+}
+
+section.register .container {
+  min-height: 100vh;
+}
+
+section.register .container form {
+  width: 100%;
+  margin-top: 50px;
+}
+
+section.register .container form .form-control {
+  margin-bottom: 10px;
+}
+
+section.register .container form button {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+section.register .container p.text-login span {
+  cursor: pointer;
+  font-weight: 500;
+}
