@@ -1,0 +1,71 @@
+section.dashboard {
+  max-width: 425px;
+  min-height: 100vh;
+  background-color: #fff;
+  margin: auto;
+  overflow: hidden;
+}
+
+section.dashboard .container {
+  min-height: 100vh;
+  padding: 15px;
+}
+
+section.dashboard .container .box-user {
+  width: 100%;
+  height: 150px;
+  padding: 20px;
+  border-radius: 10px;
+  background: linear-gradient(225deg, #e6e6e6, #ffffff);
+  box-shadow: -20px 20px 60px #d9d9d9, 20px -20px 60px #ffffff;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  gap: 20px;
+}
+
+section.dashboard .container .box-user .image img {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  border: 5px solid #2099ff;
+}
+
+section.dashboard .container .box-user .profile {
+  width: 100%;
+}
+
+section.dashboard .container .box-user .profile h5,
+section.dashboard .container .box-user .profile p {
+  margin: 0;
+  padding: 0;
+}
+
+section.dashboard .container .box-user .profile hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+section.dashboard .container .box-menu {
+  margin-top: 30px;
+}
+
+section.dashboard .container .box-menu button {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #22a4ff, #1d8ae6);
+  margin-bottom: 5px;
+}
+
+section.dashboard .container .box-menu p {
+  font-weight: 500;
+}
+
+section.dashboard .container .box-menu .col {
+  margin-bottom: 10px;
+}
