@@ -38,11 +38,11 @@ const Login = () => {
 
             localStorage.setItem("accessToken", res.data.user.accessToken);
             localStorage.setItem("id", res.data.user.id.toString());
-            localStorage.setItem("name", res.data.user.name);
+            localStorage.setItem("name", res.data.user.name || `User #${res.data.user.id}`);
             localStorage.setItem("nip", res.data.user.nip);
-            localStorage.setItem("mapel", res.data.user.mapel);
-            localStorage.setItem("foto", res.data.user.foto);
-            localStorage.setItem("email", res.data.user.email);
+            localStorage.setItem("mapel", res.data.user.mapel || `-`);
+            localStorage.setItem("sekolah", res.data.user.sekolah || `-`);
+            localStorage.setItem("foto", res.data.user.foto || `User_Profile.png`);
             localStorage.setItem("created_at", res.data.user.created_at);
             localStorage.setItem("updated_at", res.data.user.updated_at);
 
