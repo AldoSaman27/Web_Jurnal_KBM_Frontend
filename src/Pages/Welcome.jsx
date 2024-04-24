@@ -17,7 +17,7 @@ const Welcome = () => {
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores
           error molestiae eum architecto deleniti minus.
         </p>
-        <Button onClick={() => navigate("/auth/login")}>Log In</Button>
+        <Button onClick={() => navigate("/auth/login")}>Sign In</Button>
         <Button
           onClick={() => navigate("/auth/register")}
           className="btn-secondary"
