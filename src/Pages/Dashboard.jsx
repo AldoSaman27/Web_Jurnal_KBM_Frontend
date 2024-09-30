@@ -22,7 +22,7 @@ const Dashboard = () => {
           </div>
           <div className="profile">
             <h5>{localStorage.getItem("name")}</h5>
-            <hr />
+            <hr size="5" color="white" />
             <p>{localStorage.getItem("nip")}</p>
           </div>
         </div>
