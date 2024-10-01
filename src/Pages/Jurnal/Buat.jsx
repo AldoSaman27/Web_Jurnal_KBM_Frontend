@@ -4,7 +4,7 @@ import "../../Styles/Jurnal/Buat.css";
 import Loading from "../../Assets/loading_white.svg";
 
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // React Bootstrap
 import { Button, Container, Form, InputGroup } from "react-bootstrap";
@@ -21,6 +21,7 @@ import Swal from "sweetalert2";
 const BuatJurnal = () => {
     const navigate = useNavigate();
 
+    const [isPageLoading, setIsPageLoading] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [hariTanggalValue, setHariTanggalValue] = useState("");
     const [jamPelajaranValue, setJamPelajaranValue] = useState("");
@@ -32,6 +33,17 @@ const BuatJurnal = () => {
     const [siswaIzinValue, setSiswaIzinValue] = useState("");
     const [fotoKegiatanFile, setFotoKegiatanFile] = useState(null);
     const [fotoKegiatanPreview, setFotoKegiatanPreview] = useState(null);
+
+    useEffect(() => {
+        if (!localStorage.getItem("accessToken")) return navigate("/auth/login");
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('accessToken')}`;
+        axios.defaults.headers.common['Accept'] = 'application/json';
+        axios.get(`${process.env.REACT_APP_API_URL}/api/user`).then(() => {
+            setIsPageLoading(false);
+        }).catch(() => {
+            return navigate("/auth/login");
+        })
+    }, [navigate]);
 
     const handleFotoKegiatanChange = (e) => {
         setFotoKegiatanFile(e.target.files[0]);
@@ -178,11 +190,10 @@ const BuatJurnal = () => {
                 });
             }
         });
-
         return 1;
     };
 
-    return (
+    if (!isPageLoading) return (
         <section id="buat-jurnal" className="buat-jurnal">
             <Container className="d-flex flex-column">
                 <h3 className="text-primary">Buat Jurnal</h3>
