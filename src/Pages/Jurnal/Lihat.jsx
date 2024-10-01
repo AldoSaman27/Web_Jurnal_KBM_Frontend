@@ -35,9 +35,13 @@ const LihatJurnal = () => {
             return navigate("/auth/login");
         })
 
+        const today = new Date();  
+        const month = today.getMonth() + 1;    
+        const years = today.getFullYear();
+
         axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("accessToken")}`;
         axios.defaults.headers.common["Accept"] = "application/json";
-        axios.get(`${process.env.REACT_APP_API_URL}/api/jurnal/index/${localStorage.getItem("nip")}/${localStorage.getItem("lihat_jurnal_month")}/${localStorage.getItem("lihat_jurnal_years")}`).then((res) => {
+        axios.get(`${process.env.REACT_APP_API_URL}/api/jurnal/index/${localStorage.getItem("nip")}/${localStorage.getItem("lihat_jurnal_month") || month}/${localStorage.getItem("lihat_jurnal_years") || years}`).then((res) => {
             setJurnalData(res.data.jurnal);
         }).catch(() => {
             Swal.fire({
