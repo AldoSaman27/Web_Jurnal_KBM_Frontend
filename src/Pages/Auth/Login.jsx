@@ -1,14 +1,25 @@
 import "../../Styles/Login.css";
 
+// Axios
 import axios from "axios";
-import React, { useState } from "react";
+
+// React
+import { useState } from "react";
+
+// React Bootstrap Icons
 import * as Icon from "react-bootstrap-icons";
-import { Button, Container } from "react-bootstrap";
-import { FloatingLabel, Form } from "react-bootstrap";
+
+// React Bootstrap
+import { Button, Container, FloatingLabel, Form } from "react-bootstrap";
+
+// React Router Dom
 import { useNavigate } from "react-router-dom";
 
 // Assets
 import Loading from "../../Assets/loading_white.svg";
+
+// Sweet Alert
+import Swal from "sweetalert2";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -21,9 +32,21 @@ const Login = () => {
         e.preventDefault();
 
         if (nipValue === "" || nipValue.length < 18 || nipValue === null || nipValue === undefined) {
-            return alert("NIP is required or NIP must be 18 digits!");
+            return Swal.fire({
+                title: "Opss!",
+                text: "NIP is required or NIP must be 18 digits!",
+                icon: "error",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            });
         } else if (passwordValue === "" || passwordValue.length < 5 || passwordValue === null || passwordValue === undefined) {
-            return alert("Password is required or Password must be 5 digits!");
+            return Swal.fire({
+                title: "Opss!",
+                text: "Password is required or Password must be 5 digits!",
+                icon: "error",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            });
         }
 
         setIsLoading(true);
@@ -50,9 +73,31 @@ const Login = () => {
         }).catch((err) => {
             setIsLoading(false);
 
-            if (err.response?.data.message) return alert(err.response.data.message);
-
-            return alert("Internal Server Error. Please contact the development team!");
+            if (err.response.status === 401) { 
+                return Swal.fire({
+                    title: "Opss!",
+                    text: err.response.data.message,
+                    icon: "error",
+                    showCancelButton: false,
+                    confirmButtonText: "Oke",
+                });
+            } else if (err.response.status === 422) {
+                return Swal.fire({
+                    title: err.response.data.message,
+                    text: err.response.data.errors.nip || err.response.data.errors.password,
+                    icon: "error",
+                    showCancelButton: false,
+                    confirmButtonText: "Oke",
+                });
+            } else {
+                return Swal.fire({
+                    title: "Opss!",
+                    text: "Internal Server Error. Please contact the development team!",
+                    icon: "error",
+                    showCancelButton: false,
+                    confirmButtonText: "Oke",
+                });
+            }
         });
         return 1;
     };
