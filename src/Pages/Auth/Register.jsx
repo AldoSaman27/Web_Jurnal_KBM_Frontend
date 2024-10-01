@@ -1,13 +1,25 @@
 import "../../Styles/Register.css";
 
+// Axios
 import axios from "axios";
-import React, { useState } from "react";
+
+// React
+import { useState } from "react";
+
+// React Bootstrap Icons
 import * as Icon from "react-bootstrap-icons";
+
+// React Bootstrap
 import { Container, FloatingLabel, Form, Button } from "react-bootstrap";
+
+// React Router Dom
 import { useNavigate } from "react-router-dom";
 
 // Assets
 import Loading from "../../Assets/loading_white.svg";
+
+// Sweet Alert
+import Swal from "sweetalert2";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -21,13 +33,37 @@ const Register = () => {
         e.preventDefault();
 
         if (nipValue === "" || nipValue.length < 18) {
-            return alert("NIP is required or NIP must be 18 digits!");
+            return Swal.fire({
+                title: "Opss!",
+                text: "NIP is required or NIP must be 18 digits!",
+                icon: "error",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            });
         } else if (passwordValue === "" || passwordValue.length < 5) {
-            return alert("Password is required or Password must be 5 digits!");
+            return Swal.fire({
+                title: "Opss!",
+                text: "Password is required or Password must be 5 digits!",
+                icon: "error",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            });
         } else if (confirmPasswordValue === "" || confirmPasswordValue.length < 5) {
-            return alert("Confirm Password is required or Confirm Password must be 5 digits!");
+            return Swal.fire({
+                title: "Opss!",
+                text: "Confirm Password is required or Confirm Password must be 5 digits!",
+                icon: "error",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            });
         } else if (passwordValue !== confirmPasswordValue) {
-            return alert("Password and Confirm Password must be the same!");
+            return Swal.fire({
+                title: "Opss!",
+                text: "Password and Confirm Password must be the same!",
+                icon: "error",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            });
         }
 
         setIsLoading(true);
@@ -50,13 +86,33 @@ const Register = () => {
             localStorage.setItem("created_at", res.data.user.created_at);
             localStorage.setItem("updated_at", res.data.user.updated_at);
 
-            alert("Your account has been created.");
-
-            return navigate("/dashboard");
+            return Swal.fire({
+                title: "Success!",
+                text: "Your account has been created.",
+                icon: "success",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            }).then(() => navigate("/dashboard"));
         }).catch((err) => {
             setIsLoading(false);
 
-            return alert("Internal Server Error. Please contact the development team!");
+            if (err.response.status === 422) {
+                return Swal.fire({
+                    title: err.response.data.message,
+                    text: err.response.data.errors.nip || err.response.data.errors.password,
+                    icon: "error",
+                    showCancelButton: false,
+                    confirmButtonText: "Oke",
+                });
+            } else {
+                return Swal.fire({
+                    title: "Opss!",
+                    text: "Internal Server Error. Please contact the development team!",
+                    icon: "error",
+                    showCancelButton: false,
+                    confirmButtonText: "Oke",
+                });
+            }
         });
         return 1;
     };
