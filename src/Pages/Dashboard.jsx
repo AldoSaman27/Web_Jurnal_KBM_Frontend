@@ -65,7 +65,7 @@ const Dashboard = () => {
                             <p>Unduh Jurnal</p>
                         </div>
                         <div className="col d-flex flex-column align-items-center justify-content-center">
-                            <Button>
+                            <Button onClick={() => navigate("/settings")}>
                                 <Icon.Gear size={30} />
                             </Button>
                             <p>Settings</p>
