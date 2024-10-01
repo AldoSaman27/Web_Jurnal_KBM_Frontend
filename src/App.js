@@ -11,19 +11,21 @@ import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
 // Jurnal Pages
 import BuatJurnal from "./Pages/Jurnal/Buat";
+import LihatJurnal from "./Pages/Jurnal/Lihat";
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/jurnal/buat" element={<BuatJurnal />} />
-      </Routes>
-    </Router>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<Welcome />} />
+                <Route path="/auth/login" element={<Login />} />
+                <Route path="/auth/register" element={<Register />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/jurnal/buat" element={<BuatJurnal />} />
+                <Route path="/jurnal/lihat" element={<LihatJurnal />} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
