@@ -88,7 +88,13 @@ const Settings = () => {
             localStorage.setItem("created_at", res.data.user.created_at);
             localStorage.setItem("updated_at", res.data.user.updated_at);
             
-            console.log(res);
+            return Swal.fire({
+                title: "Success!",
+                text: "User data has been updated successfully.",
+                icon: "success",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            });
         }).catch((err) => {
             setIsLoading(false);
 
