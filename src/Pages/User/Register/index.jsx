@@ -1,4 +1,4 @@
-import "../../Styles/Register.css";
+import "./Register.style.css";
 
 // Axios
 import axios from "axios";
@@ -16,12 +16,12 @@ import { Container, FloatingLabel, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 // Assets
-import Loading from "../../Assets/loading_white.svg";
+import Loading from "../../../Assets/loading_white.svg";
 
 // Sweet Alert
 import Swal from "sweetalert2";
 
-const Register = () => {
+const PageRegister = () => {
     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -73,18 +73,18 @@ const Register = () => {
         formData.append("password", passwordValue);
 
         axios.defaults.headers.common["Accept"] = "application/json";
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, formData).then((res) => {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/user/register`, formData).then((res) => {
             setIsLoading(false);
 
-            localStorage.setItem("accessToken", res.data.user.accessToken);
+            localStorage.setItem("accessToken", res.data.accessToken);
             localStorage.setItem("id", res.data.user.id.toString());
-            localStorage.setItem("name", res.data.user.name || `User #${res.data.user.id}`);
-            localStorage.setItem("nip", res.data.user.nip);
-            localStorage.setItem("mapel", res.data.user.mapel || `-`);
-            localStorage.setItem("sekolah", res.data.user.sekolah || `-`);
-            localStorage.setItem("foto", res.data.user.foto || `User_Profile.png`);
-            localStorage.setItem("created_at", res.data.user.created_at);
-            localStorage.setItem("updated_at", res.data.user.updated_at);
+            localStorage.setItem("user_nama", res.data.user.nama);
+            localStorage.setItem("user_nip", res.data.user.nip);
+            localStorage.setItem("user_mata_pelajaran", res.data.user.mata_pelajaran);
+            localStorage.setItem("user_sekolah", res.data.user.sekolah);
+            localStorage.setItem("user_foto_profil", res.data.user.foto_profil);
+            localStorage.setItem("user_created_at", res.data.user.created_at);
+            localStorage.setItem("user_updated_at", res.data.user.updated_at);
 
             return Swal.fire({
                 title: "Success!",
@@ -133,11 +133,11 @@ const Register = () => {
                     </FloatingLabel>
                     <Button type="submit" disabled={isLoading}>
                         {isLoading ? <img src={Loading} alt="" width={20} /> : null}
-                        Register
+                        Daftar
                     </Button>
                 </form>
                 <p className="text-login">Punya akun?{" "}
-                    <span className="text-primary" onClick={() => navigate("/auth/login")}>
+                    <span className="text-primary" onClick={() => navigate("/user/login")}>
                         Masuk
                     </span>
                 </p>
@@ -146,4 +146,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default PageRegister;

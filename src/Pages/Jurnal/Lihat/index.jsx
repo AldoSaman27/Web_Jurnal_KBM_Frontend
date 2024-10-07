@@ -1,5 +1,4 @@
-import axios from "axios";
-import "../../Styles/Jurnal/Lihat.css";
+import "./Lihat.style.css";
 
 // React
 import { useEffect, useState } from "react";
@@ -17,7 +16,10 @@ import { useNavigate } from "react-router-dom";
 // Sweet Alert
 import Swal from "sweetalert2";
 
-const LihatJurnal = () => {
+// Axios
+import axios from "axios";
+
+const PageLihatJurnal = () => {
     const navigate = useNavigate();
 
     const [isPageLoading, setIsPageLoading] = useState(true);
@@ -26,13 +28,13 @@ const LihatJurnal = () => {
     const [jurnalData, setJurnalData] = useState([]);
 
     useEffect(() => {
-        if (!localStorage.getItem("accessToken")) return navigate("/auth/login");
+        if (!localStorage.getItem("accessToken")) return navigate("/user/login");
         axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('accessToken')}`;
         axios.defaults.headers.common['Accept'] = 'application/json';
         axios.get(`${process.env.REACT_APP_API_URL}/api/user`).then(() => {
             setIsPageLoading(false);
         }).catch(() => {
-            return navigate("/auth/login");
+            return navigate("/user/login");
         })
 
         const today = new Date();  
@@ -41,8 +43,9 @@ const LihatJurnal = () => {
 
         axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("accessToken")}`;
         axios.defaults.headers.common["Accept"] = "application/json";
-        axios.get(`${process.env.REACT_APP_API_URL}/api/jurnal/index/${localStorage.getItem("nip")}/${localStorage.getItem("lihat_jurnal_month") || month}/${localStorage.getItem("lihat_jurnal_years") || years}`).then((res) => {
+        axios.get(`${process.env.REACT_APP_API_URL}/api/jurnal/index/${localStorage.getItem("user_nip")}/${localStorage.getItem("lihat_jurnal_month") || month}/${localStorage.getItem("lihat_jurnal_years") || years}`).then((res) => {
             setJurnalData(res.data.jurnal);
+            console.log(res.data.jurnal);
         }).catch(() => {
             Swal.fire({
                 title: "Opss!",
@@ -146,7 +149,7 @@ const LihatJurnal = () => {
                                     <tr>
                                         <td>Jam Pembelajaran</td>
                                         <td>:</td>
-                                        <td>{item.jam_ke}</td>
+                                        <td>{item.jam_pembelajaran}</td>
                                     </tr>
                                     <tr>
                                         <td>Kelas</td>
@@ -154,15 +157,29 @@ const LihatJurnal = () => {
                                         <td>{item.kelas}</td>
                                     </tr>
                                     <tr>
-                                        <td>Uraian Kegiatan</td>
-                                        <td>:</td>
-                                        <td>{item.uraian_kegiatan}</td>
-                                    </tr>
-                                    <tr>
                                         <td>Kehadiran</td>
                                         <td>:</td>
                                         <td>{item.kehadiran}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Uraian Kegiatan</td>
+                                        <td>:</td>
+                                        <td>{item.uraian_kegiatan}</td>
+                                    </tr>
+                                    {item.materi && (
+                                        <tr>
+                                            <td>Materi</td>
+                                            <td>:</td>
+                                            <td>{item.materi}</td>
+                                        </tr>
+                                    )}
+                                    {item.tujuan_pembelajaran && (
+                                        <tr>
+                                            <td>Tujuan Pembelajaran</td>
+                                            <td>:</td>
+                                            <td>{item.tujuan_pembelajaran}</td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                             <img src={`${process.env.REACT_APP_API_URL}/storage/activity-photos/${item.foto_kegiatan}`} alt="" />
@@ -178,4 +195,4 @@ const LihatJurnal = () => {
     )
 }
 
-export default LihatJurnal
+export default PageLihatJurnal

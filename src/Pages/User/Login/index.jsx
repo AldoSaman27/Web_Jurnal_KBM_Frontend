@@ -1,4 +1,4 @@
-import "../../Styles/Login.css";
+import "./Login.style.css";
 
 // Axios
 import axios from "axios";
@@ -16,12 +16,12 @@ import { Button, Container, FloatingLabel, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 // Assets
-import Loading from "../../Assets/loading_white.svg";
+import Loading from "../../../Assets/loading_white.svg";
 
 // Sweet Alert
 import Swal from "sweetalert2";
 
-const Login = () => {
+const PageLogin = () => {
     const navigate = useNavigate();
 
     const [nipValue, setNipValue] = useState("");
@@ -56,18 +56,18 @@ const Login = () => {
         formData.append("password", passwordValue);
 
         axios.defaults.headers.common["Accept"] = "application/json";
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, formData).then((res) => {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/user/login`, formData).then((res) => {
             setIsLoading(false);
 
-            localStorage.setItem("accessToken", res.data.user.accessToken);
+            localStorage.setItem("accessToken", res.data.accessToken);
             localStorage.setItem("id", res.data.user.id.toString());
-            localStorage.setItem("name", res.data.user.name || `User #${res.data.user.id}`);
-            localStorage.setItem("nip", res.data.user.nip);
-            localStorage.setItem("mapel", res.data.user.mapel || `-`);
-            localStorage.setItem("sekolah", res.data.user.sekolah || `-`);
-            localStorage.setItem("foto", res.data.user.foto || `User_Profile.png`);
-            localStorage.setItem("created_at", res.data.user.created_at);
-            localStorage.setItem("updated_at", res.data.user.updated_at);
+            localStorage.setItem("user_nama", res.data.user.nama);
+            localStorage.setItem("user_nip", res.data.user.nip);
+            localStorage.setItem("user_mata_pelajaran", res.data.user.mata_pelajaran);
+            localStorage.setItem("user_sekolah", res.data.user.sekolah);
+            localStorage.setItem("user_foto_profil", res.data.user.foto_profil);
+            localStorage.setItem("user_created_at", res.data.user.created_at);
+            localStorage.setItem("user_updated_at", res.data.user.updated_at);
 
             return navigate("/dashboard");
         }).catch((err) => {
@@ -115,11 +115,11 @@ const Login = () => {
                     </FloatingLabel>
                     <Button type="submit" disabled={isLoading}>
                         {isLoading ? <img src={Loading} alt="" width={20} /> : null}
-                        Login
+                        Masuk
                     </Button>
                 </form>
                 <p className="text-register">Tidak punya akun?{" "}
-                    <span className="text-primary" onClick={() => navigate("/auth/register")}>
+                    <span className="text-primary" onClick={() => navigate("/user/register")}>
                         Buat akun
                     </span>
                 </p>
@@ -128,4 +128,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default PageLogin;

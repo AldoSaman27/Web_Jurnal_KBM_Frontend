@@ -4,27 +4,27 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Pages
-import Welcome from "./Pages/Welcome";
-import Dashboard from "./Pages/Dashboard";
-// Auth Pages
-import Login from "./Pages/Auth/Login";
-import Register from "./Pages/Auth/Register";
+import PageWelcome from "./Pages/Welcome";
+import PageDashboard from "./Pages/Dashboard";
+// User Pages
+import PageLogin from "./Pages/User/Login";
+import PageRegister from "./Pages/User/Register";
+import PageSettings from "./Pages/User/Settings";
 // Jurnal Pages
-import BuatJurnal from "./Pages/Jurnal/Buat";
-import LihatJurnal from "./Pages/Jurnal/Lihat";
-import Settings from "./Pages/Settings";
+import PageBuatJurnal from "./Pages/Jurnal/Buat";
+import PageLihatJurnal from "./Pages/Jurnal/Lihat";
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Welcome />} />
-                <Route path="/auth/login" element={<Login />} />
-                <Route path="/auth/register" element={<Register />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/jurnal/buat" element={<BuatJurnal />} />
-                <Route path="/jurnal/lihat" element={<LihatJurnal />} />
+                <Route path="/" element={<PageWelcome />} />
+                <Route path="/user/login" element={<PageLogin />} />
+                <Route path="/user/register" element={<PageRegister />} />
+                <Route path="/user/settings" element={<PageSettings />} />
+                <Route path="/dashboard" element={<PageDashboard />} />
+                <Route path="/jurnal/buat" element={<PageBuatJurnal />} />
+                <Route path="/jurnal/lihat" element={<PageLihatJurnal />} />
             </Routes>
         </Router>
     );

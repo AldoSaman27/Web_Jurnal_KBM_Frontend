@@ -1,4 +1,4 @@
-import "../Styles/Dashboard.css";
+import "./Dashboard.style.css";
 
 // React
 import { useEffect, useState } from "react";
@@ -15,33 +15,49 @@ import { useNavigate } from "react-router-dom";
 // Axios
 import axios from "axios";
 
-const Dashboard = () => {
+const PageDashboard = () => {
     const navigate = useNavigate();
 
     const [isPageLoading, setIsPageLoading] = useState(true);
 
     useEffect(() => {
-        if (!localStorage.getItem("accessToken")) return navigate("/auth/login");
+        if (!localStorage.getItem("accessToken")) return navigate("/user/login");
         axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('accessToken')}`;
         axios.defaults.headers.common['Accept'] = 'application/json';
         axios.get(`${process.env.REACT_APP_API_URL}/api/user`).then(() => {
             setIsPageLoading(false);
         }).catch(() => {
-            return navigate("/auth/login");
+            return navigate("/user/login");
         })
     }, [navigate]);
+
+    const returnUserFotoProfil = () => {
+        if (localStorage.getItem("user_foto_profil") === "null" || localStorage.getItem("user_foto_profil") === "undefined") {
+            return `${process.env.REACT_APP_API_URL}/storage/profile-picture/User_Profile.png`;
+        } else {
+            return `${process.env.REACT_APP_API_URL}/storage/profile-picture/${localStorage.getItem("user_foto_profil")}`;
+        }
+    }
+
+    const returnUserNama = () => {
+        if (localStorage.getItem("user_nama") === "null" || localStorage.getItem("user_nama") === "undefined") {
+            return `User #${localStorage.getItem("id")}`;
+        } else {
+            return localStorage.getItem("user_nama");
+        }
+    }
 
     if (!isPageLoading) return (
         <section id="dashboard" className="dashboard">
             <Container>
                 <div className="box-user">
                     <div className="image">
-                        <img src={`${process.env.REACT_APP_API_URL}/storage/profile-picture/${localStorage.getItem("foto")}`} alt=""/>
+                        <img src={returnUserFotoProfil()} alt=""/>
                     </div>
                     <div className="profile">
-                        <h5>{localStorage.getItem("name")}</h5>
+                        <h5>{returnUserNama()}</h5>
                         <hr size="5" color="white" />
-                        <p>{localStorage.getItem("nip")}</p>
+                        <p>{localStorage.getItem("user_nip")}</p>
                     </div>
                 </div>
                 <div className="box-menu">
@@ -65,7 +81,7 @@ const Dashboard = () => {
                             <p>Unduh Jurnal</p>
                         </div>
                         <div className="col d-flex flex-column align-items-center justify-content-center">
-                            <Button onClick={() => navigate("/settings")}>
+                            <Button onClick={() => navigate("/user/settings")}>
                                 <Icon.Gear size={30} />
                             </Button>
                             <p>Settings</p>
@@ -77,4 +93,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default PageDashboard;
