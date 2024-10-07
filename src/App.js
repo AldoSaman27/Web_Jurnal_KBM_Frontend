@@ -13,6 +13,7 @@ import PageSettings from "./Pages/User/Settings";
 // Jurnal Pages
 import PageBuatJurnal from "./Pages/Jurnal/Buat";
 import PageLihatJurnal from "./Pages/Jurnal/Lihat";
+import PageEditJurnal from "./Pages/Jurnal/Edit";
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/dashboard" element={<PageDashboard />} />
                 <Route path="/jurnal/buat" element={<PageBuatJurnal />} />
                 <Route path="/jurnal/lihat" element={<PageLihatJurnal />} />
+                <Route path="/jurnal/edit/:id" element={<PageEditJurnal />} />
             </Routes>
         </Router>
     );

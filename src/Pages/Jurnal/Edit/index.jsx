@@ -1,4 +1,4 @@
-import "./Buat.style.css";
+import "./Edit.style.css";
 
 // Assets
 import Loading from "../../../Assets/loading_white.svg";
@@ -13,13 +13,14 @@ import { Button, Container, Form, InputGroup } from "react-bootstrap";
 import axios from "axios";
 
 // React Router Dom
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Sweet Alert
 import Swal from "sweetalert2";
 
-const PageBuatJurnal = () => {
+const PageEditJurnal = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
 
     const [isPageLoading, setIsPageLoading] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -36,16 +37,48 @@ const PageBuatJurnal = () => {
     const [fotoKegiatanFile, setFotoKegiatanFile] = useState(null);
     const [fotoKegiatanPreview, setFotoKegiatanPreview] = useState(null);
 
+    const returnFixedValue = (value) => {
+        if (value === "null" || value === "undefined") {
+            return "";
+        } else {
+            return value;
+        }
+    }
+
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) return navigate("/user/login");
         axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('accessToken')}`;
         axios.defaults.headers.common['Accept'] = 'application/json';
-        axios.get(`${process.env.REACT_APP_API_URL}/api/user`).then(() => {
-            setIsPageLoading(false);
-        }).catch(() => {
+        axios.get(`${process.env.REACT_APP_API_URL}/api/user`).then(() => {}).catch(() => {
             return navigate("/user/login");
         })
-    }, [navigate]);
+        
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('accessToken')}`;
+        axios.defaults.headers.common['Accept'] = 'application/json';
+        axios.get(`${process.env.REACT_APP_API_URL}/api/jurnal/show/${id}`).then((res) => {
+            const kehadiranArray = res.data.jurnal.kehadiran.split(" ");
+            setHariTanggalValue(res.data.jurnal.hari_tanggal);
+            setJamPelajaranValue(res.data.jurnal.jam_pembelajaran);
+            setKelasValue(res.data.jurnal.kelas);
+            setSiswaHadirValue(kehadiranArray[0]);
+            setSiswaTanpaKabarValue(kehadiranArray[2]);
+            setSiswaSakitValue(kehadiranArray[5]);
+            setSiswaIzinValue(kehadiranArray[7]);
+            setUraianKegiatanValue(res.data.jurnal.uraian_kegiatan);
+            setMateriValue(returnFixedValue(res.data.jurnal.materi));
+            setTujuanPembelajaranValue(returnFixedValue(res.data.jurnal.tujuan_pembelajaran));
+            setFotoKegiatanPreview(process.env.REACT_APP_API_URL + "/storage/activity-photos/" + res.data.jurnal.foto_kegiatan);
+            setIsPageLoading(false);
+        }).catch(() => {
+            Swal.fire({
+                title: "Opss!",
+                text: "Internal Server Error. Please contact the development team!",
+                icon: "error",
+                showCancelButton: false,
+                confirmButtonText: "Oke",
+            });
+        })
+    }, [navigate, id]);
 
     const handleFotoKegiatanChange = (e) => {
         setFotoKegiatanFile(e.target.files[0]);
@@ -122,7 +155,7 @@ const PageBuatJurnal = () => {
                 showCancelButton: false,
                 confirmButtonText: "Oke",
             });
-        } else if (fotoKegiatanFile === "" || fotoKegiatanFile === 0 || fotoKegiatanFile === null || fotoKegiatanFile === undefined) {
+        } /* else if (fotoKegiatanFile === "" || fotoKegiatanFile === 0 || fotoKegiatanFile === null || fotoKegiatanFile === undefined) {
             return Swal.fire({
                 title: "Opss!",
                 text: "Foto Kegiatan is required!",
@@ -130,7 +163,7 @@ const PageBuatJurnal = () => {
                 showCancelButton: false,
                 confirmButtonText: "Oke",
             });
-        } else if (!fotoKegiatanFile.type.includes("image")) {
+        } */ else if (fotoKegiatanFile && !fotoKegiatanFile.type.includes("image")) {
             return Swal.fire({
                 title: "Opss!",
                 text: "Foto Kegiatan: Only image files are allowed!",
@@ -151,20 +184,20 @@ const PageBuatJurnal = () => {
         formData.append("uraian_kegiatan", uraianKegiatanValue);
         if (materiValue) formData.append("materi", materiValue);
         if (tujuanPembelajaranValue) formData.append("tujuan_pembelajaran", tujuanPembelajaranValue);
-        formData.append("foto_kegiatan", fotoKegiatanFile);
+        if (fotoKegiatanFile) formData.append("foto_kegiatan", fotoKegiatanFile);
 
         axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("accessToken")}`;
         axios.defaults.headers.common["Accept"] = "application/json";
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/jurnal/store`, formData).then((res) => {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/jurnal/update/${id}`, formData).then((res) => {
             setIsLoading(false);
 
             return Swal.fire({
                 title: "Success!",
-                text: "Jurnal has been created successfully.",
+                text: "Jurnal has been updated successfully.",
                 icon: "success",
                 showCancelButton: false,
                 confirmButtonText: "Oke",
-            }).then(() => navigate("/dashboard"));            
+            }).then(() => navigate("/jurnal/lihat"));          
         }).catch((err) => {
             setIsLoading(false);
 
@@ -195,43 +228,43 @@ const PageBuatJurnal = () => {
             }
         });
         return 1;
-    };
+    }
 
     if (!isPageLoading) return (
-        <section id="buat-jurnal" className="buat-jurnal">
-            <Container className="d-flex flex-column">
-                <h3 className="text-primary">Buat Jurnal</h3>
+        <section id="edit-jurnal" className="edit-jurnal">
+            <Container>
+                <h3 className="text-primary">Edit Jurnal ({id})</h3>
                 <form method="POST" onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput">
                         <Form.Label>Hari / Tanggal</Form.Label>
-                        <Form.Control type="date" placeholder="Hari / Tanggal" onChange={(e) => setHariTanggalValue(e.target.value)} />
+                        <Form.Control type="date" placeholder="Hari / Tanggal" value={hariTanggalValue} onChange={(e) => setHariTanggalValue(e.target.value)} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput">
                         <Form.Label>Jam Pembelajaran</Form.Label>
-                        <Form.Control type="text" placeholder="Jam Pembelajaran" onChange={(e) => setJamPelajaranValue(e.target.value)}/>
+                        <Form.Control type="text" placeholder="Jam Pembelajaran" value={jamPelajaranValue} onChange={(e) => setJamPelajaranValue(e.target.value)}/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput">
                         <Form.Label>Kelas</Form.Label>
-                        <Form.Control type="text" placeholder="Kelas" onChange={(e) => setKelasValue(e.target.value)} />
+                        <Form.Control type="text" placeholder="Kelas" value={kelasValue} onChange={(e) => setKelasValue(e.target.value)} />
                     </Form.Group>
                     <Form.Label>Kehadiran</Form.Label>
                     <InputGroup className="mb-3">
-                        <Form.Control type="number" aria-label="Hadir" placeholder="Hadir" onChange={(e) => setSiswaHadirValue(e.target.value)} />
-                        <Form.Control type="number" aria-label="Tanpa Kabar" placeholder="Tanpa Kabar" onChange={(e) => setSiswaTanpaKabarValue(e.target.value)} />
-                        <Form.Control type="number" aria-label="Sakit" placeholder="Sakit" onChange={(e) => setSiswaSakitValue(e.target.value)} />
-                        <Form.Control type="number" aria-label="Izin" placeholder="Izin" onChange={(e) => setSiswaIzinValue(e.target.value)}/>
+                        <Form.Control type="number" aria-label="Hadir" placeholder="Hadir" value={siswaHadirValue} onChange={(e) => setSiswaHadirValue(e.target.value)} />
+                        <Form.Control type="number" aria-label="Tanpa Kabar" placeholder="Tanpa Kabar" value={siswaTanpaKabarValue} onChange={(e) => setSiswaTanpaKabarValue(e.target.value)} />
+                        <Form.Control type="number" aria-label="Sakit" placeholder="Sakit" value={siswaSakitValue} onChange={(e) => setSiswaSakitValue(e.target.value)} />
+                        <Form.Control type="number" aria-label="Izin" placeholder="Izin" value={siswaIzinValue} onChange={(e) => setSiswaIzinValue(e.target.value)}/>
                     </InputGroup>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput">
                         <Form.Label>Uraian Kegiatan</Form.Label>
-                        <Form.Control type="text" placeholder="Uraian Kegiatan" onChange={(e) => setUraianKegiatanValue(e.target.value)}/>
+                        <Form.Control type="text" placeholder="Uraian Kegiatan" value={uraianKegiatanValue} onChange={(e) => setUraianKegiatanValue(e.target.value)}/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput">
                         <Form.Label>Materi</Form.Label>
-                        <Form.Control type="text" placeholder="Materi" onChange={(e) => setMateriValue(e.target.value)}/>
+                        <Form.Control type="text" placeholder="Materi" value={materiValue} onChange={(e) => setMateriValue(e.target.value)}/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput">
                         <Form.Label>Tujuan Pembelajaran</Form.Label>
-                        <Form.Control type="text" placeholder="Tujuan Pembelajaran" onChange={(e) => setTujuanPembelajaranValue(e.target.value)}/>
+                        <Form.Control type="text" placeholder="Tujuan Pembelajaran" value={tujuanPembelajaranValue} onChange={(e) => setTujuanPembelajaranValue(e.target.value)}/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formFile">
                         <Form.Label>Foto Kegiatan</Form.Label>
@@ -244,7 +277,7 @@ const PageBuatJurnal = () => {
                 </form>
             </Container>
         </section>
-    );
-};
+    )
+}
 
-export default PageBuatJurnal;
+export default PageEditJurnal

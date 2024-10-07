@@ -45,7 +45,6 @@ const PageLihatJurnal = () => {
         axios.defaults.headers.common["Accept"] = "application/json";
         axios.get(`${process.env.REACT_APP_API_URL}/api/jurnal/index/${localStorage.getItem("user_nip")}/${localStorage.getItem("lihat_jurnal_month") || month}/${localStorage.getItem("lihat_jurnal_years") || years}`).then((res) => {
             setJurnalData(res.data.jurnal);
-            console.log(res.data.jurnal);
         }).catch(() => {
             Swal.fire({
                 title: "Opss!",
@@ -70,16 +69,6 @@ const PageLihatJurnal = () => {
         return 1;
     }
 
-    const handleJurnalEdit = (id) => {
-        Swal.fire({
-            title: "Coming Soon!",
-            icon: "info",
-            showCancelButton: false,
-            confirmButtonText: "Oke",
-        });
-        return 1;
-    }
-    
     const handleJurnalDelete = (id) => {
         Swal.fire({
             title: `Are you sure you want to delete this journal? (ID: ${id})`,
@@ -184,7 +173,7 @@ const PageLihatJurnal = () => {
                             </table>
                             <img src={`${process.env.REACT_APP_API_URL}/storage/activity-photos/${item.foto_kegiatan}`} alt="" />
                             <div className="jurnal-card-footer">
-                                <Button variant="primary" onClick={() => handleJurnalEdit(item.id)}>Edit</Button>
+                                <Button variant="primary" onClick={() => navigate(`/jurnal/edit/${item.id}`)}>Edit</Button>
                                 <Button variant="danger" onClick={() => handleJurnalDelete(item.id)} disabled={isLoading}>Delete</Button>
                             </div>
                         </div>
