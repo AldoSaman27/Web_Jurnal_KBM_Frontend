@@ -1,5 +1,8 @@
 import "./Lihat.style.css";
 
+// Assets
+import Loading from "../../../Assets/loading_white.svg";
+
 // React
 import { useEffect, useState } from "react";
 
@@ -174,7 +177,7 @@ const PageLihatJurnal = () => {
                             <img src={`${process.env.REACT_APP_API_URL}/storage/activity-photos/${item.foto_kegiatan}`} alt="" />
                             <div className="jurnal-card-footer">
                                 <Button variant="primary" onClick={() => navigate(`/jurnal/edit/${item.id}`)}>Edit</Button>
-                                <Button variant="danger" onClick={() => handleJurnalDelete(item.id)} disabled={isLoading}>Delete</Button>
+                                <Button variant="danger" onClick={() => handleJurnalDelete(item.id)} disabled={isLoading}>{isLoading ? <img src={Loading} alt="" width={20} /> : null} Delete</Button>
                             </div>
                         </div>
                     ))}

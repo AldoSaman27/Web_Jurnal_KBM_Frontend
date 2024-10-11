@@ -131,10 +131,7 @@ const PageRegister = () => {
                     <FloatingLabel controlId="floatingInput" label="Confirm Password">
                         <Form.Control type="password" placeholder="Confirm Password" onChange={(e) => setConfirmPasswordValue(e.target.value)} />
                     </FloatingLabel>
-                    <Button type="submit" disabled={isLoading}>
-                        {isLoading ? <img src={Loading} alt="" width={20} /> : null}
-                        Daftar
-                    </Button>
+                    <Button type="submit" disabled={isLoading}>{isLoading ? <img src={Loading} alt="" width={20} /> : null} Daftar</Button>
                 </form>
                 <p className="text-login">Punya akun?{" "}
                     <span className="text-primary" onClick={() => navigate("/user/login")}>

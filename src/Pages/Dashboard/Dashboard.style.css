@@ -69,3 +69,23 @@ section.dashboard .container .box-menu p {
 section.dashboard .container .box-menu .col {
   margin-bottom: 10px;
 }
+
+/* Modal */
+.modal-dialog .modal-content .modal-body .formJurnal {
+  margin-bottom: 15px;
+}
+
+.modal-dialog .modal-content .modal-body .formJurnal div {
+  display: flex;
+  gap: 15px;
+}
+
+.modal-dialog .modal-content .modal-body .formSemester {
+  margin-bottom: 15px;
+}
+
+.modal-dialog .modal-content .modal-body .formTahunPembelajaran div {
+  display: flex;
+  gap: 15px;
+}
+/* End of Modal */

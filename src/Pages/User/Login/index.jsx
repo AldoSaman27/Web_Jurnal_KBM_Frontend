@@ -113,10 +113,7 @@ const PageLogin = () => {
                     <FloatingLabel controlId="floatingPassword" label="Password">
                         <Form.Control type="password" placeholder="Password" onChange={(e) => setPasswordValue(e.target.value)} />
                     </FloatingLabel>
-                    <Button type="submit" disabled={isLoading}>
-                        {isLoading ? <img src={Loading} alt="" width={20} /> : null}
-                        Masuk
-                    </Button>
+                    <Button type="submit" disabled={isLoading}>{isLoading ? <img src={Loading} alt="" width={20} /> : null} Masuk</Button>
                 </form>
                 <p className="text-register">Tidak punya akun?{" "}
                     <span className="text-primary" onClick={() => navigate("/user/register")}>
